@@ -11,7 +11,16 @@ import android.view.MenuItem;
 
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements settingsFragment.SettingsSelectedListener {
+
+    public String postalCode = "08027";
+    private final String LOG_TAG = MainActivity.class.getSimpleName();
+    public void onArticleSelected(String sentPostalCode) {
+        // Save the postal code into the variable
+        postalCode = sentPostalCode;
+        Log.v(LOG_TAG, "Your selected postalCode is:");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +55,11 @@ public class MainActivity extends AppCompatActivity {
             transaction.addToBackStack(null);
             transaction.commit();
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            Log.v("aa","aa");
             return true;
         }
 
         if (id == android.R.id.home){
+            Log.e(LOG_TAG, "BACK BUTTON PRESSED FROM MAIN");
             onBackPressed();
         }
 
