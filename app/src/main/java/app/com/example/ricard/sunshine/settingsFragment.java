@@ -1,14 +1,15 @@
 package app.com.example.ricard.sunshine;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.content.Context;
 import android.widget.EditText;
 
 /**
@@ -19,7 +20,8 @@ public class settingsFragment extends Fragment {
 
     private final String LOG_TAG = settingsFragment.class.getSimpleName();
     SettingsSelectedListener mCallback;
-    public String postalCode;
+    public EditText city;
+    public CommonHelpers SettingsManager;
 
     public settingsFragment() {
     }
@@ -28,7 +30,7 @@ public class settingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.settings_main, container, false);
-
+        city = (EditText) rootView.findViewById(R.id.cityname);
         return rootView;
     }
     @Override
@@ -36,26 +38,42 @@ public class settingsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
+        SettingsManager = new CommonHelpers();
 
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.settingsfragment, menu);
+
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        Log.e(LOG_TAG, "BACK BUTTON PRESSED 0");
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == android.R.id.home) {
+        if (id == R.id.action_save) {
             Log.e(LOG_TAG, "BACK BUTTON PRESSED");
-            mCallback.onArticleSelected(postalCode);
+
+            if(SettingsManager==null){
+                Log.e(LOG_TAG, "I'M NULL!");
+            }
+            SettingsManager.writePreference(getActivity(),"CITY",city.getText().toString());
+
+            mCallback.onArticleSelected(city.getText().toString());
         }
         return super.onOptionsItemSelected(item);
     }
 
     //Interface to pass settings variables to main activity
     public interface SettingsSelectedListener {
-        void onArticleSelected(String sentPostalCode);
+        void onArticleSelected(String cityName);
     }
 
     @Override

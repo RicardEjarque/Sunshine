@@ -2,6 +2,7 @@ package app.com.example.ricard.sunshine;
 
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -14,12 +15,16 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity
         implements settingsFragment.SettingsSelectedListener {
 
-    public String postalCode = "08027";
+    public CommonHelpers SettingsManager;
+
+    public String cityName = "Barcelona";
     private final String LOG_TAG = MainActivity.class.getSimpleName();
-    public void onArticleSelected(String sentPostalCode) {
+    public void onArticleSelected(String cityName) {
         // Save the postal code into the variable
-        postalCode = sentPostalCode;
-        Log.v(LOG_TAG, "Your selected postalCode is:");
+        //postalCode = sentPostalCode;
+
+        cityName = SettingsManager.readPreference(this, "CITY");
+        Log.v(LOG_TAG, "Your selected city is:"+ cityName);
     }
 
     @Override
@@ -31,6 +36,7 @@ public class MainActivity extends AppCompatActivity
                     .add(R.id.container, new forecastFragment())
                     .commit();
         }
+        SettingsManager = new CommonHelpers();
     }
 
     @Override
@@ -47,21 +53,31 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction transaction =  fragmentManager.beginTransaction();
-            transaction.replace(R.id.container, new settingsFragment());
-            transaction.addToBackStack(null);
-            transaction.commit();
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        final Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.actionSettingsFragment);
+        if(currentFragment!= null){
+        Log.e(LOG_TAG, String.valueOf(currentFragment.onOptionsItemSelected(item)));}
+        if (currentFragment != null && currentFragment.onOptionsItemSelected(item)) {
             return true;
         }
 
-        if (id == android.R.id.home){
-            Log.e(LOG_TAG, "BACK BUTTON PRESSED FROM MAIN");
-            onBackPressed();
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction transaction =  fragmentManager.beginTransaction();
+                transaction.replace(R.id.container, new settingsFragment());
+                transaction.addToBackStack(null);
+                transaction.commit();
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                return true;
+            case android.R.id.home:
+                Log.e(LOG_TAG, "BACK BUTTON PRESSED FROM MAIN");
+                onBackPressed();
+                return true;
+            default:
+                break;
         }
+
+        //noinspection SimplifiableIfStatement
 
         return super.onOptionsItemSelected(item);
     }

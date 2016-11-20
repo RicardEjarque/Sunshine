@@ -1,5 +1,6 @@
 package app.com.example.ricard.sunshine;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -31,6 +32,8 @@ public class forecastFragment extends Fragment {
 
     public forecastFragment() {
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,6 +75,7 @@ public class forecastFragment extends Fragment {
                 // Add this line in order for this fragment to handle menu events.
                 setHasOptionsMenu(true);
 
+
            }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -101,6 +105,7 @@ public class forecastFragment extends Fragment {
     public class FetchWeatherTask extends AsyncTask <Void,Void,Void>{
 
         private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
+        public CommonHelpers SettingsManager;
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -112,12 +117,28 @@ public class forecastFragment extends Fragment {
 
             // Will contain the raw JSON response as a string.
             String forecastJsonStr = null;
-
+            String city;
             try {
+                SettingsManager = new CommonHelpers();
                 // Construct the URL for the OpenWeatherMap query
                 // Possible parameters are available at OWM's forecast API page, at
                 // http://openweathermap.org/API#forecast
-                URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?q=Barcelona,724&cnt=7&APPID=***REMOVED***&mode=json&units=metric");
+                city = SettingsManager.readPreference(getActivity(), "CITY");
+                Uri.Builder builder = new Uri.Builder();
+                builder.scheme("http")
+                    .authority("api.openweathermap.org")
+                        .appendPath("data")
+                        .appendPath("2.5")
+                        .appendPath("forecast")
+                        .appendPath("daily")
+                        .appendQueryParameter("q",city)
+                        .appendQueryParameter("724&cnt","7")
+                        .appendQueryParameter("APPID","***REMOVED***")
+                        .appendQueryParameter("mode","json")
+                        .appendQueryParameter("units","metric");
+                String myUrlString = builder.build().toString();
+                Log.e(LOG_TAG, myUrlString);
+                URL url = new URL(myUrlString);
 
                 // Create the request to OpenWeatherMap, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
