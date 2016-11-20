@@ -1,5 +1,6 @@
 package app.com.example.ricard.sunshine;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -84,8 +85,10 @@ public class forecastFragment extends Fragment {
 
                 CharSequence text = mForecastAdapter.getItem(position);
                 int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(getActivity(), text, duration);
-                toast.show();
+                //Toast toast = Toast.makeText(getActivity(), text, duration);
+                //toast.show();
+                Intent detailsViewAct = new Intent(getActivity(), DetailActivity.class).putExtra(Intent.EXTRA_TEXT, text);
+                startActivity(detailsViewAct);
             }
         });
         return rootView;
