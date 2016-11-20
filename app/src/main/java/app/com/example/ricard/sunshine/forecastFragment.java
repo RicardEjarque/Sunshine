@@ -95,20 +95,20 @@ public class forecastFragment extends Fragment {
         switch(id) {
             case R.id.action_refresh:
                 FetchWeatherTask weatherTask = new FetchWeatherTask();
-                weatherTask.execute(null, null, null);
+                String city = "Barcelona";
+                weatherTask.execute(city, null, null);
                 break;
         }
 
            return super.onOptionsItemSelected(item);
     }
 
-    public class FetchWeatherTask extends AsyncTask <Void,Void,Void>{
+    public class FetchWeatherTask extends AsyncTask <String,Void,Void>{
 
         private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
-        public CommonHelpers SettingsManager;
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected Void doInBackground(String... params) {
 
             // These two need to be declared outside the try/catch
             // so that they can be closed in the finally block.
@@ -118,12 +118,13 @@ public class forecastFragment extends Fragment {
             // Will contain the raw JSON response as a string.
             String forecastJsonStr = null;
             String city;
+            city = params[0];
+            Log.e(LOG_TAG,"algo");
             try {
-                SettingsManager = new CommonHelpers();
                 // Construct the URL for the OpenWeatherMap query
                 // Possible parameters are available at OWM's forecast API page, at
                 // http://openweathermap.org/API#forecast
-                city = SettingsManager.readPreference(getActivity(), "CITY");
+
                 Uri.Builder builder = new Uri.Builder();
                 builder.scheme("http")
                     .authority("api.openweathermap.org")
