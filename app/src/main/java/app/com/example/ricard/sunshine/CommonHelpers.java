@@ -14,7 +14,7 @@ public class CommonHelpers {
 
     public SharedPreferences sharedPreferences;
     public SharedPreferences.Editor sharedPreferencesEditor;
-    private final String LOG_TAG = settingsFragment.class.getSimpleName();
+    private final String LOG_TAG = settingsFragment2.class.getSimpleName();
     public void CommonHelpers(){
 
     }

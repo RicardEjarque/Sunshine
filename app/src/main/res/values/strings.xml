@@ -3,6 +3,20 @@
     <string name="action_refresh">Refresh</string>
     <string name="action_save">Save</string>
     <string name="title_activity_detail">Detail activity</string>
+    <string name="title_activity_settings">Detail activity</string>
+    <string name="settings_title">Settings</string>
+    <string name="location_view">View location</string>
+
+    <!-- Strings for the location preference -->
+    <string name="location_preference_title">Location</string>
+    <string name="location_preference_key">location</string>
+    <string name="location_preference_default_value">Barcelona</string>
+
+    <!-- Strings for the temperature units preference -->
+    <string name="temp_units_preference_title">Temperature Units</string>
+    <string name="temp_units_preference_key">temp_units</string>
+    <string name="temp_units_str_res">tempUnitsResName</string>
+    <string name="temp_units_preference_default_value">Metric</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -16,14 +16,14 @@ import android.widget.EditText;
  * Created by Ricard on 17/11/2016.
  */
 
-public class settingsFragment extends Fragment {
+public class settingsFragment2 extends Fragment {
 
-    private final String LOG_TAG = settingsFragment.class.getSimpleName();
+    private final String LOG_TAG = settingsFragment2.class.getSimpleName();
     SettingsSelectedListener mCallback;
     public EditText city;
     public CommonHelpers SettingsManager;
 
-    public settingsFragment() {
+    public settingsFragment2() {
     }
 
     @Override

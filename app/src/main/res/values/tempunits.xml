@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array
+       name = "temp_units_str_res">
+        <item>"Metric"</item>
+        <item>"Imperial"</item>
+    </string-array>
+
+
+</resources>
