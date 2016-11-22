@@ -22,7 +22,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,7 +32,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.ShareActionProvider;
 
 public class DetailActivity extends ActionBarActivity {
 
@@ -65,6 +66,11 @@ public class DetailActivity extends ActionBarActivity {
             viewLocation();
         }
 
+        if (id == R.id.menu_item_share) {
+            shareLocationWeather();
+            Log.d(LOG_TAG, "Couldn't call " + ", no intent found");
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -82,6 +88,21 @@ public class DetailActivity extends ActionBarActivity {
             startActivity(locationViewAct);
         } else {
             Log.d(LOG_TAG, "Couldn't call " + city + ", no intent found");
+        }
+    }
+
+    public void shareLocationWeather (){
+
+        Intent LocationWeatherAct = new Intent(Intent.ACTION_SEND);
+        LocationWeatherAct.setType("text/*");
+        Uri LocationWeUri = Uri.parse("test").buildUpon().build();
+
+        LocationWeatherAct.putExtra(Intent.EXTRA_STREAM, LocationWeUri);
+
+        if (LocationWeatherAct.resolveActivity(getPackageManager()) != null) {
+            startActivity(LocationWeatherAct);
+        } else {
+            Log.d(LOG_TAG, "Couldn't call " + ", no intent found");
         }
     }
 
@@ -122,7 +143,7 @@ public class DetailActivity extends ActionBarActivity {
         MenuItem item = menu.findItem(R.id.menu_item_share);
 
         // Fetch and store ShareActionProvider
-        mShareActionProvider = (ShareActionProvider) item.getActionProvider();
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
 
         // Return true to display menu
         return true;
