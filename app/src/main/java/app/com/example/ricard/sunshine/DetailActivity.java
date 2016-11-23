@@ -21,17 +21,10 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 public class DetailActivity extends ActionBarActivity {
 
@@ -44,35 +37,41 @@ public class DetailActivity extends ActionBarActivity {
         setContentView(R.layout.activity_detail);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.activity_detail, new DetailFragment())
+                    .add(R.id.activity_detail_id, new detailFragment())
                     .commit();
         }
+
     }
 
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        switch(id) {
+            case R.id.action_settings:
+                Intent settingsViewAct = new Intent(this, SettingsActivity.class);
+                startActivity(settingsViewAct);
+                break;
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent settingsViewAct = new Intent(this, SettingsActivity.class);
-            startActivity(settingsViewAct);
-        }
-        if (id == R.id.action_location_view) {
-            viewLocation();
+            case R.id.action_location_view:
+                viewLocation();
+                break;
+
         }
 
-        if (id == R.id.menu_item_share) {
-            shareLocationWeather();
-            Log.d(LOG_TAG, "Couldn't call " + ", no intent found");
-        }
+
 
         return super.onOptionsItemSelected(item);
     }
+
 
     public void viewLocation (){
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -90,71 +89,5 @@ public class DetailActivity extends ActionBarActivity {
             Log.d(LOG_TAG, "Couldn't call " + city + ", no intent found");
         }
     }
-
-    public void shareLocationWeather (){
-
-        Intent LocationWeatherAct = new Intent(Intent.ACTION_SEND);
-        LocationWeatherAct.setType("text/*");
-        Uri LocationWeUri = Uri.parse("test").buildUpon().build();
-
-        LocationWeatherAct.putExtra(Intent.EXTRA_STREAM, LocationWeUri);
-
-        if (LocationWeatherAct.resolveActivity(getPackageManager()) != null) {
-            startActivity(LocationWeatherAct);
-        } else {
-            Log.d(LOG_TAG, "Couldn't call " + ", no intent found");
-        }
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class DetailFragment extends Fragment {
-
-        public DetailFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-
-            View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
-
-            Intent intent = getActivity().getIntent();
-            if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
-                String forecastStr = intent.getStringExtra(Intent.EXTRA_TEXT);
-                ((TextView) rootView.findViewById(R.id.textView)).setText(forecastStr);
-            }
-
-
-
-            return rootView;
-        }
-    }
-
-    private ShareActionProvider mShareActionProvider;
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate menu resource file.
-        getMenuInflater().inflate(R.menu.detail, menu);
-
-        // Locate MenuItem with ShareActionProvider
-        MenuItem item = menu.findItem(R.id.menu_item_share);
-
-        // Fetch and store ShareActionProvider
-        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
-
-        // Return true to display menu
-        return true;
-    }
-
-    // Call to update the share intent
-    private void setShareIntent(Intent shareIntent) {
-        if (mShareActionProvider != null) {
-            mShareActionProvider.setShareIntent(shareIntent);
-        }
-    }
-
 
 }
