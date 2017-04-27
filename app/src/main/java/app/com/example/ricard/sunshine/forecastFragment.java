@@ -282,10 +282,10 @@ public class forecastFragment extends Fragment {
 
         if (!(units.equals(getString(R.string.temp_units_preference_default_value)))){
 
-            if (units.equals("Imperial")){
+            if (units.equals(R.string.temp_units_imperial_value)){
                         convertedUnits[0]=high*9/5+32;
                         convertedUnits[1]=low*9/5+32;
-                } else if (units.equals("Metric")){
+                } else if (units.equals(R.string.temp_units_metric_value)){
                     convertedUnits[0]=(high-32)*5/9;
                     convertedUnits[1]=(low-32)*5/9;
                 } else {

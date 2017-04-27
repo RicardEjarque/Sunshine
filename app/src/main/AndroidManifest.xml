@@ -35,6 +35,12 @@
                 android:value="app.com.example.ricard.sunshine.MainActivity" />
 
         </activity>
+
+        <provider
+            android:name="app.com.example.ricard.sunshine.data.WeatherProvider"
+            android:authorities="app.com.example.ricard.sunshine">
+        </provider>
+
     </application>
 
 </manifest>
