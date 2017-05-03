@@ -18,7 +18,7 @@ import android.preference.PreferenceManager;
 
 public class SettingsActivity extends PreferenceActivity
         implements Preference.OnPreferenceChangeListener {
-
+    private final String LOG_TAG = settingsFragment2.class.getSimpleName();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,9 +49,12 @@ public class SettingsActivity extends PreferenceActivity
                         .getString(preference.getKey(), ""));
     }
 
+
     @Override
     public boolean onPreferenceChange(Preference preference, Object value) {
         String stringValue = value.toString();
+
+
 
         if (preference instanceof ListPreference) {
             // For list preferences, look up the correct display value in

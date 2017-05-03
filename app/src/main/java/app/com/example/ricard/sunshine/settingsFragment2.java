@@ -66,6 +66,7 @@ public class settingsFragment2 extends Fragment {
             }
             SettingsManager.writePreference(getActivity(),"CITY",city.getText().toString());
 
+
             mCallback.onArticleSelected(city.getText().toString());
         }
         return super.onOptionsItemSelected(item);

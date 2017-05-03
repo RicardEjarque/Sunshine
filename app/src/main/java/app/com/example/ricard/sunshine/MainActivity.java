@@ -16,18 +16,35 @@ public class MainActivity extends AppCompatActivity         {
 
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
+    private String mLocation;
+    private String FORECASTFRAGMENT_TAG = "FFTAG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mLocation = Utility.getPreferredLocation(this);
         super.onCreate(savedInstanceState);
+
+
+
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new forecastFragment())
+                    .add(R.id.container, new forecastFragment(), FORECASTFRAGMENT_TAG)
                     .commit();
         }
 
     }
+
+    @Override
+    public void onResume(){
+        if(mLocation != Utility.getPreferredLocation(this)){
+            forecastFragment ff = (forecastFragment)getSupportFragmentManager().findFragmentByTag(FORECASTFRAGMENT_TAG);
+            ff.onLocationChanged();
+            mLocation = Utility.getPreferredLocation(this);
+        }
+        super.onResume();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -1,8 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width = "match_parent"
+    android:layout_height = "wrap_content"
     android:gravity="center_vertical"
     android:minHeight="?android:attr/listPreferredItemHeight"
-    android:id="@+id/list_item_forecast_textview">
+    android:orientation = "horizontal"
+    android:padding="16dp">
+    <ImageView
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:id="@+id/list_item_icon">
+    </ImageView>
+    <LinearLayout
+        android:layout_width = "0dp"
+        android:layout_height = "wrap_content"
+        android:orientation = "vertical"
+        android:layout_weight="1"
+        android:paddingLeft="16dp">
 
-</TextView>
+        <TextView
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:id="@+id/list_item_date_textview">
+        </TextView>
+        <TextView
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:id="@+id/list_item_forecast_textview">
+        </TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content"
+        android:orientation = "vertical"
+
+        >
+
+        <TextView
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:id="@+id/list_item_high_textview">
+        </TextView>
+        <TextView
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:id="@+id/list_item_low_textview">
+        </TextView>
+
+    </LinearLayout>
+</LinearLayout>
+
+
