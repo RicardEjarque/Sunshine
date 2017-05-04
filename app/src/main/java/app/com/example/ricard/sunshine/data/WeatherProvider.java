@@ -194,12 +194,12 @@ public class WeatherProvider extends ContentProvider {
                 retCursor = getWeatherByLocationSettingAndDate(uri, projection, sortOrder);
                 retCursor.setNotificationUri(getContext().getContentResolver(), uri);
                 Log.e(LOG_TAG, "I am notificating!!");
-                retCursor.moveToFirst();
+                //retCursor.moveToFirst();
                 //retCursor.moveToNext();
                 //int type = cursor.getType(6);
                 //Log.e(LOG_TAG, "This is " + retCursor.getColumnCount());
-                Double updatedtemp = retCursor.getDouble(0);
-                Log.e(LOG_TAG, "2: Updated max temp: " + updatedtemp);
+                //Double updatedtemp = retCursor.getDouble(0);
+                //Log.e(LOG_TAG, "2: Updated max temp: " + updatedtemp);
                 break;
             }
             // "weather/*"

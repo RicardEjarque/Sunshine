@@ -29,19 +29,43 @@ import android.view.MenuItem;
 public class DetailActivity extends ActionBarActivity {
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
-
-
+    private String mLocation;
+    private String DETAILFRAGMENT_TAG = "DFTAG";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mLocation = Utility.getPreferredLocation(this);
         setContentView(R.layout.activity_detail);
         if (savedInstanceState == null) {
+
+            Bundle arguments = new Bundle();
+            arguments.putString("uriDate", getIntent().getData().toString());
+            detailFragment fragment = new detailFragment();
+            fragment.setArguments(arguments);
+
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.activity_detail_id, new detailFragment())
+                    .add(R.id.weather_detail_container, fragment, DETAILFRAGMENT_TAG)
                     .commit();
         }
 
     }
+
+    @Override
+    public void onResume(){
+
+        String location = Utility.getPreferredLocation(this);
+        if(location != null && !location.equals(mLocation) ){
+
+            detailFragment df = (detailFragment)getSupportFragmentManager().findFragmentByTag(DETAILFRAGMENT_TAG);
+            if(null != df) {
+                df.onLocationChanged(location);
+            }
+
+            mLocation = Utility.getPreferredLocation(this);
+        }
+        super.onResume();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

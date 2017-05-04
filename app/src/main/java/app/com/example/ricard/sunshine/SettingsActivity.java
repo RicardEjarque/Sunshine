@@ -1,6 +1,9 @@
 package app.com.example.ricard.sunshine;
 
 
+import android.annotation.TargetApi;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -31,6 +34,11 @@ public class SettingsActivity extends PreferenceActivity
         bindPreferenceSummaryToValue(findPreference(getString(R.string.location_preference_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.temp_units_preference_key)));
     }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    @Override
+    public Intent getParentActivityIntent() {
+        return super.getParentActivityIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);}
 
     /**
      * Attaches a listener so the summary is always updated with the preference value.

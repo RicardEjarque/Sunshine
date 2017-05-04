@@ -347,12 +347,12 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
 
             Cursor cur = mContext.getContentResolver().query(weatherForLocationUri,
                     null, null, null, sortOrder);
-            cur.moveToFirst();
+            //cur.moveToFirst();
             //cursor.moveToNext();
             //int type = cursor.getType(6);
             //Log.e(LOG_TAG, "This is " + colmax);
-            String updatedtemp = cur.getString(6);
-            Log.e(LOG_TAG, "Updated max temp justo despues de meterla: " + updatedtemp);
+            //String updatedtemp = cur.getString(6);
+            //Log.e(LOG_TAG, "Updated max temp justo despues de meterla: " + updatedtemp);
             //cVVector2 = new Vector<ContentValues>(cur.getCount());
             //if ( cur.moveToFirst() ) {
                 //do {
@@ -414,7 +414,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
             final String NUM_DAYS = "cnt";
             final String NUM_DAYS_VALUE = "14";
             final String APPID = "APPID";
-            final String APPID_VALUE = "";
+            final String APPID_VALUE = "***REMOVED***";
             final String MODE = "mode";
 
 

@@ -2,6 +2,7 @@ package app.com.example.ricard.sunshine;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -26,7 +27,23 @@ import app.com.example.ricard.sunshine.data.WeatherContract;
  */
 
 public class detailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    public static detailFragment newInstance(String dateUriString){
+      detailFragment f = new detailFragment();
+
+        Bundle args =  new Bundle();
+        args.putString("uriDate", dateUriString);
+        f.setArguments(args);
+
+        return f;
+    }
+
+    public boolean mLocationChanged;
+    private Uri mUri;
+
     public detailFragment() {
+
+
     }
     private static final int DETAILS_LOADER = 1;
 
@@ -122,6 +139,7 @@ public class detailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
     }
@@ -162,6 +180,10 @@ public class detailFragment extends Fragment implements LoaderManager.LoaderCall
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        Bundle arguments = getArguments();
+        if(arguments!=null) {
+            mUri = Uri.parse(getArguments().getString("uriDate", "null"));
+        }
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         viewHolder = new ViewHolder(rootView);
 
@@ -178,17 +200,25 @@ public class detailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public Loader onCreateLoader(int i, Bundle bundle) {
-       Intent intent = getActivity().getIntent();
-        if(intent == null){
+
+
+        if (mUri != null) {
+            //Log.e(LOG_TAG,"es"+getShownUri());
+
+
+            return new CursorLoader(getActivity(),
+                    mUri,
+                    FORECAST_COLUMNS,
+                    null,
+                    null,
+                    null);
+        } else {
+            Log.e(LOG_TAG, "Estoy en tablet, pero no tengo datos! Es la primera vez?");
             return null;
+
+
         }
 
-        return new CursorLoader(getActivity(),
-                intent.getData(),
-                FORECAST_COLUMNS,
-                null,
-                null,
-                null);
     }
 
     @Override
@@ -273,6 +303,17 @@ public class detailFragment extends Fragment implements LoaderManager.LoaderCall
     private void setShareIntent(Intent shareIntent) {
         if (mShareActionProvider != null) {
             mShareActionProvider.setShareIntent(shareIntent);
+        }
+    }
+
+    void onLocationChanged( String newLocation ) {
+        // replace the uri, since the location has changed
+        Uri uri = mUri;
+        if (null != uri) {
+            long date = WeatherContract.WeatherEntry.getDateFromUri(uri);
+            Uri updatedUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(newLocation, date);
+            mUri = updatedUri;
+            getLoaderManager().restartLoader(DETAILS_LOADER, null, this);
         }
     }
 }

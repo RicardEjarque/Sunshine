@@ -56,4 +56,14 @@
     <!-- Humidity format CHAR LIMIT=25]-->
     <string name="format_humidity">Humidity: <xliff:g id="humidity">%1.0f</xliff:g> %%</string>
 
+
+    <string-array name="sports_array">
+    <item>Shuttle Badminton</item>
+    <item>Tennis</item>
+    <item>FootBall</item>
+    <item>Basket Ball</item>
+    <item>Table Tennis</item>
+    <item>Chess</item>
+    <item>Hockey</item>
+    </string-array>
 </resources>
