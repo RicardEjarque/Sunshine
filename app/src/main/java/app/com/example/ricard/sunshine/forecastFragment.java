@@ -42,7 +42,10 @@ public class forecastFragment extends Fragment implements LoaderManager.LoaderCa
     private final String LOG_TAG = WeatherProvider.class.getSimpleName();
     private static final int FORECAST_LOADER = 0;
     private ForecastAdapter mForecastAdapter;
-
+    private static final String SAVED_POS = "savedPos";
+    private int mCurrentPos;
+    private int mPastPos;
+    private ListView mListView;
     private static final String[] FORECAST_COLUMNS = {
             // In this case the id needs to be fully qualified with a table name, since
             // the content provider joins the location & weather tables in the background
@@ -110,24 +113,28 @@ public class forecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             final Bundle savedInstanceState) {
         // The CursorAdapter will take data from our cursor and populate the ListView.
 
+        if(savedInstanceState!=null && savedInstanceState.containsKey(SAVED_POS)) {
+            mCurrentPos = savedInstanceState.getInt(SAVED_POS);
+        }
         mForecastAdapter = new ForecastAdapter(getActivity(), null, 0);
         Log.e(LOG_TAG, "paso por el onCreateView del forecast fragment");
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         // Get a reference to the ListView, and attach this adapter to it.
-        ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
-        listView.setAdapter(mForecastAdapter);
+        mListView = (ListView) rootView.findViewById(R.id.listview_forecast);
+        mListView.setAdapter(mForecastAdapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView adapterView, View view, int position, long l) {
                 // CursorAdapter returns a cursor at the correct position for getItem(), or null
                 // if it cannot seek to that position.
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
+                mPastPos = position;
                 if (cursor != null) {
 
                     String locationSetting = Utility.getPreferredLocation(getActivity());
@@ -142,7 +149,13 @@ public class forecastFragment extends Fragment implements LoaderManager.LoaderCa
         return rootView;
     }
 
-
+    @Override
+    public void onSaveInstanceState (Bundle outState){
+        if(mPastPos != ListView.INVALID_POSITION) {
+            outState.putInt(SAVED_POS, mPastPos);
+        }
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -184,6 +197,9 @@ public class forecastFragment extends Fragment implements LoaderManager.LoaderCa
         //String updatedtemp = cursor.getString(6);
         //Log.e(LOG_TAG, "Updated max temp: " + updatedtemp);
         mForecastAdapter.swapCursor(cursor);
+        if(mCurrentPos != ListView.INVALID_POSITION) {
+            mListView.smoothScrollToPosition(mCurrentPos);
+        }
     }
 
     @Override

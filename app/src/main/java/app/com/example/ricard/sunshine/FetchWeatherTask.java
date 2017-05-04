@@ -414,7 +414,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
             final String NUM_DAYS = "cnt";
             final String NUM_DAYS_VALUE = "14";
             final String APPID = "APPID";
-            final String APPID_VALUE = "***REMOVED***";
+            final String APPID_VALUE = BuildConfig.OPEN_WEATHER_MAP_API_KEY;
             final String MODE = "mode";
 
 
