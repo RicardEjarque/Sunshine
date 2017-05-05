@@ -43,8 +43,10 @@ public class forecastFragment extends Fragment implements LoaderManager.LoaderCa
     private static final int FORECAST_LOADER = 0;
     private ForecastAdapter mForecastAdapter;
     private static final String SAVED_POS = "savedPos";
+    private static final String SELECTED_ONCE = "SONCE";
     private int mCurrentPos;
     private int mPastPos;
+    public boolean mTwoPane;
     private ListView mListView;
     private static final String[] FORECAST_COLUMNS = {
             // In this case the id needs to be fully qualified with a table name, since
@@ -75,10 +77,12 @@ public class forecastFragment extends Fragment implements LoaderManager.LoaderCa
     static final int COL_WEATHER_CONDITION_ID = 6;
     static final int COL_COORD_LAT = 7;
     static final int COL_COORD_LONG = 8;
-
+    private boolean mSelectedOnce=false;
 
     public forecastFragment() {
     }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -120,12 +124,36 @@ public class forecastFragment extends Fragment implements LoaderManager.LoaderCa
             mCurrentPos = savedInstanceState.getInt(SAVED_POS);
         }
         mForecastAdapter = new ForecastAdapter(getActivity(), null, 0);
+        mForecastAdapter.setUseTodayLayout(!mTwoPane);
         Log.e(LOG_TAG, "paso por el onCreateView del forecast fragment");
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         // Get a reference to the ListView, and attach this adapter to it.
         mListView = (ListView) rootView.findViewById(R.id.listview_forecast);
         mListView.setAdapter(mForecastAdapter);
+
+        if(savedInstanceState==null){
+            mListView.post(new Runnable() {
+                @Override
+                public void run() {
+                    mListView.setItemChecked(0, true);
+
+                }
+            });
+        }
+        if(savedInstanceState!=null&&savedInstanceState.containsKey(SELECTED_ONCE)) {
+            if(!savedInstanceState.getBoolean(SELECTED_ONCE)) {
+                mListView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mListView.setItemChecked(0, true);
+
+                    }
+                });
+            } else{
+                mSelectedOnce = true;
+            }
+        }
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -135,6 +163,7 @@ public class forecastFragment extends Fragment implements LoaderManager.LoaderCa
                 // if it cannot seek to that position.
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 mPastPos = position;
+                mSelectedOnce = true;
                 if (cursor != null) {
 
                     String locationSetting = Utility.getPreferredLocation(getActivity());
@@ -154,6 +183,7 @@ public class forecastFragment extends Fragment implements LoaderManager.LoaderCa
         if(mPastPos != ListView.INVALID_POSITION) {
             outState.putInt(SAVED_POS, mPastPos);
         }
+        outState.putBoolean(SELECTED_ONCE, mSelectedOnce);
         super.onSaveInstanceState(outState);
     }
 
@@ -167,6 +197,7 @@ public class forecastFragment extends Fragment implements LoaderManager.LoaderCa
         FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity());
         String location = Utility.getPreferredLocation(getActivity());
         weatherTask.execute(location);
+
     }
 
 
@@ -196,11 +227,16 @@ public class forecastFragment extends Fragment implements LoaderManager.LoaderCa
         //Log.e(LOG_TAG, "This is " + colmax);
         //String updatedtemp = cursor.getString(6);
         //Log.e(LOG_TAG, "Updated max temp: " + updatedtemp);
+
         mForecastAdapter.swapCursor(cursor);
+
         if(mCurrentPos != ListView.INVALID_POSITION) {
             mListView.smoothScrollToPosition(mCurrentPos);
+
         }
     }
+
+
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
@@ -218,5 +254,12 @@ public class forecastFragment extends Fragment implements LoaderManager.LoaderCa
          * DetailFragmentCallback for when an item has been selected.
          */
         public void onItemSelected(Uri dateUri);
+    }
+
+    public void setUseTodayLayout(boolean twopane) {
+        mTwoPane = twopane;
+        if (mForecastAdapter != null) {
+            mForecastAdapter.setUseTodayLayout(!twopane);
+        }
     }
 }

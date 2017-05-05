@@ -29,7 +29,7 @@ import app.com.example.ricard.sunshine.data.WeatherContract;
 public class detailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static detailFragment newInstance(String dateUriString){
-      detailFragment f = new detailFragment();
+        detailFragment f = new detailFragment();
 
         Bundle args =  new Bundle();
         args.putString("uriDate", dateUriString);
@@ -57,8 +57,9 @@ public class detailFragment extends Fragment implements LoaderManager.LoaderCall
         public final TextView highView;
         public final TextView lowView;
         public final TextView humidityView;
-        public final TextView windView;
+        //public final TextView windView;
         public final TextView pressureView;
+        public final MyView windRoseView;
 
 
 
@@ -71,8 +72,9 @@ public class detailFragment extends Fragment implements LoaderManager.LoaderCall
             highView = (TextView) view.findViewById(R.id.list_item_high_textview);
             lowView = (TextView) view.findViewById(R.id.list_item_low_textview);
             humidityView = (TextView) view.findViewById(R.id.list_item_humidity_textview);
-            windView = (TextView) view.findViewById(R.id.list_item_wind_textview);
+            //windView = (TextView) view.findViewById(R.id.list_item_wind_textview);
             pressureView = (TextView) view.findViewById(R.id.list_item_pressure_textview);
+            windRoseView = (MyView) view.findViewById(R.id.list_item_windroseview);
         }
 
     }
@@ -156,8 +158,8 @@ public class detailFragment extends Fragment implements LoaderManager.LoaderCall
         if(mShareActionProvider!=null && mForecast!=null) {
             mShareActionProvider.setShareIntent(createShareForecastIntent());
         }
-         else {
-                        Log.e(LOG_TAG, "Share Action Provider is null?");
+        else {
+            Log.e(LOG_TAG, "Share Action Provider is null?");
         }
     }
 
@@ -270,7 +272,11 @@ public class detailFragment extends Fragment implements LoaderManager.LoaderCall
         float windSpeed = cursor.getFloat(COL_WEATHER_WIND_SPEED);
         float degrees = cursor.getFloat(COL_WEATHER_DEGREES);
 
-        viewHolder.windView.setText(Utility.getFormattedWind(getActivity(),windSpeed,degrees));
+        viewHolder.windRoseView.setWindSpeed(Utility.getFormattedWind(getActivity(),windSpeed,degrees));
+        viewHolder.windRoseView.setDegrees(degrees);
+        viewHolder.windRoseView.invalidate();
+
+        //viewHolder.windView.setText(Utility.getFormattedWind(getActivity(),windSpeed,degrees));
         viewHolder.humidityView.setText(String.format(getActivity().getString(R.string.format_humidity),humidity));
         viewHolder.pressureView.setText(String.format(getActivity().getString(R.string.format_pressure),pressure));
 
