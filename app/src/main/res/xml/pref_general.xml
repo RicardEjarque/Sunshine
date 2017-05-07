@@ -16,4 +16,12 @@
         android:entries = "@array/temp_units_str_res"
         android:entryValues="@array/temp_units_str_res"
         />
+
+    <CheckBoxPreference
+        android:title="@string/notification_preference_title"
+        android:key = "@string/notification_preference_key"
+        android:summaryOff="@string/pref_enable_notifications_false"
+        android:summaryOn="@string/pref_enable_notifications_true"
+        android:defaultValue="@string/notification_preference_default_value"
+        />
 </PreferenceScreen>

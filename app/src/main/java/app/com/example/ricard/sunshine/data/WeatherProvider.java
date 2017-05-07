@@ -23,7 +23,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.util.Log;
 
 import static app.com.example.ricard.sunshine.data.WeatherContract.CONTENT_AUTHORITY;
 
@@ -193,7 +192,7 @@ public class WeatherProvider extends ContentProvider {
             {
                 retCursor = getWeatherByLocationSettingAndDate(uri, projection, sortOrder);
                 retCursor.setNotificationUri(getContext().getContentResolver(), uri);
-                Log.e(LOG_TAG, "I am notificating!!");
+                //Log.e(LOG_TAG, "I am notificating!!");
                 //retCursor.moveToFirst();
                 //retCursor.moveToNext();
                 //int type = cursor.getType(6);
@@ -383,9 +382,9 @@ public class WeatherProvider extends ContentProvider {
                 try {
                     for (ContentValues value : values) {
                         normalizeDate(value);
-                        Log.e(LOG_TAG,"value is"+value);
+                        //Log.e(LOG_TAG,"value is"+value);
                         long _id = db.insert(WeatherContract.WeatherEntry.TABLE_NAME, null, value);
-                        Log.e(LOG_TAG,"paso por aquí");
+                        //Log.e(LOG_TAG,"paso por aquí");
                         if ( _id <= 0 ) throw new android.database.SQLException("Failed to insert row into " + uri);
 
                         if (_id != -1) {

@@ -20,10 +20,14 @@
     <string name="temp_units_metric_value">Metric</string>
     <string name="temp_units_imperial_value">Imperial</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Strings for the notification preference -->
+    <string name="notification_preference_title">Notifications</string>
+    <string name="notification_preference_key">notification</string>
+    <string name="notification_preference_default_value">true</string>
+    <string name="pref_enable_notifications_true">Enabled</string>
+    <string name="pref_enable_notifications_false">Not Enabled</string>
 
-    <!-- Date label when displaying today's weather forecast [CHAR LIMIT=20] -->
+        <!-- Date label when displaying today's weather forecast [CHAR LIMIT=20] -->
     <string name="today">Today</string>
 
     <!-- Date label when displaying tomorrow's weather forecast [CHAR LIMIT=20] -->
@@ -57,6 +61,14 @@
     <string name="format_humidity">Humidity: <xliff:g id="humidity">%1.0f</xliff:g> %%</string>
 
 
+    <!-- Notification Format -->
+    <string name="format_notification">
+    Forecast: <xliff:g id="condition">%1$s</xliff:g> High: <xliff:g id="high">%2$s</xliff:g> Low: <xliff:g id="low">%3$s</xliff:g>
+    </string>
+    <!-- Strings related to Notification preference -->
+    <string name="pref_last_notification">last_notification
+    </string>
+
     <string-array name="sports_array">
         <item>Shuttle Badminton</item>
         <item>Tennis</item>
@@ -66,4 +78,9 @@
         <item>Chess</item>
         <item>Hockey</item>
     </string-array>
+
+
+    <string name="sync_account_type">sunshine.example.com</string>
+    <string name="content_authority">app.com.example.ricard.sunshine</string>
+
 </resources>

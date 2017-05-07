@@ -137,6 +137,8 @@ public class WeatherContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
+
+
         /*
             Student: Fill in this buildWeatherLocation function
          */

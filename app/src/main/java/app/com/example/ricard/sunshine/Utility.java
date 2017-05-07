@@ -31,6 +31,12 @@ public class Utility {
                 context.getString(R.string.location_preference_default_value));
     }
 
+    public static boolean notificationsOn(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return (prefs.getBoolean(context.getString(R.string.notification_preference_key),
+                Boolean.parseBoolean(context.getString(R.string.notification_preference_default_value)))==true);
+    }
+
     // Format used for storing dates in the database.  ALso used for converting those strings
     // back into date objects for comparison/processing.
     public static final String DATE_FORMAT = "yyyyMMdd";
@@ -163,7 +169,7 @@ public class Utility {
         return String.format(context.getString(windFormat), windSpeed, direction);
     }
 
-    static String formatTemperature(Context context, double temperature, boolean isMetric) {
+    public static String formatTemperature(Context context, double temperature, boolean isMetric) {
         double temp;
         if ( !isMetric ) {
             temp = 9*temperature/5+32;

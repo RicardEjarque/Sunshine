@@ -33,6 +33,7 @@ public class SettingsActivity extends PreferenceActivity
         // updated when the preference changes.
         bindPreferenceSummaryToValue(findPreference(getString(R.string.location_preference_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.temp_units_preference_key)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.notification_preference_key)));
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -51,10 +52,22 @@ public class SettingsActivity extends PreferenceActivity
 
         // Trigger the listener immediately with the preference's
         // current value.
-        onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
+
+        String prefKey = preference.getKey();
+
+        if (prefKey != this.getString(R.string.notification_preference_key)) {
+
+
+            onPreferenceChange(preference,
+                    PreferenceManager
+                            .getDefaultSharedPreferences(preference.getContext())
+                            .getString(preference.getKey(), ""));
+        } else{
+            onPreferenceChange(preference,
+                    PreferenceManager
+                            .getDefaultSharedPreferences(preference.getContext())
+                            .getBoolean(preference.getKey(), true));
+        }
     }
 
 

@@ -15,6 +15,8 @@
  */
 package app.com.example.ricard.sunshine;
 
+import android.accounts.Account;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,6 +36,7 @@ import android.widget.ListView;
 
 import app.com.example.ricard.sunshine.data.WeatherContract;
 import app.com.example.ricard.sunshine.data.WeatherProvider;
+import app.com.example.ricard.sunshine.sync.SunshineSyncAdapter;
 
 /**
  * Encapsulates fetching the forecast and displaying it as a {@link ListView} layout.
@@ -48,6 +51,7 @@ public class forecastFragment extends Fragment implements LoaderManager.LoaderCa
     private int mPastPos;
     public boolean mTwoPane;
     private ListView mListView;
+    Account mAccount;
     private static final String[] FORECAST_COLUMNS = {
             // In this case the id needs to be fully qualified with a table name, since
             // the content provider joins the location & weather tables in the background
@@ -89,6 +93,7 @@ public class forecastFragment extends Fragment implements LoaderManager.LoaderCa
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
+
     }
 
     public void onLocationChanged(){
@@ -107,10 +112,15 @@ public class forecastFragment extends Fragment implements LoaderManager.LoaderCa
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_refresh) {
-            Log.e(LOG_TAG, "holiii");
-            updateWeather();
-            return true;
+        switch(id) {
+            case R.id.action_refresh:
+                Log.e(LOG_TAG, "holiii");
+                updateWeather();
+                break;
+
+            case R.id.action_location_view:
+                viewLocation();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -194,10 +204,19 @@ public class forecastFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     private void updateWeather() {
-        FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity());
-        String location = Utility.getPreferredLocation(getActivity());
-        weatherTask.execute(location);
 
+        SunshineSyncAdapter.syncImmediately(getActivity());
+        /*Intent intent = new Intent(getActivity(), SunshineService.AlarmReceiver.class);
+        intent.putExtra(SunshineService.LOCATION_QUERY_EXTRA,
+                Utility.getPreferredLocation(getActivity()));
+
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(),0,intent,PendingIntent.FLAG_ONE_SHOT);
+
+        AlarmManager alarmManager;
+
+        alarmManager =(AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+5000,pendingIntent);*/
     }
 
 
@@ -260,6 +279,29 @@ public class forecastFragment extends Fragment implements LoaderManager.LoaderCa
         mTwoPane = twopane;
         if (mForecastAdapter != null) {
             mForecastAdapter.setUseTodayLayout(!twopane);
+        }
+    }
+
+    public void viewLocation () {
+        if (null != mForecastAdapter) {
+            Cursor c = mForecastAdapter.getCursor();
+            if (null!=c) {
+                c.moveToFirst();
+                Double latitude = c.getDouble(COL_COORD_LAT);
+                Double longitude = c.getDouble(COL_COORD_LONG);
+
+                Uri geoLocation = Uri.parse("geo:0,0?").buildUpon()
+                        .appendQueryParameter("q", latitude + "," + longitude)
+                        .build();
+                Log.e(LOG_TAG, geoLocation.toString());
+                Intent locationViewAct = new Intent(Intent.ACTION_VIEW);
+                locationViewAct.setData(geoLocation);
+                if (locationViewAct.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(locationViewAct);
+                } else {
+                    Log.d(LOG_TAG, "Couldn't call " + latitude + " " + longitude + ", no intent found");
+                }
+            }
         }
     }
 }
